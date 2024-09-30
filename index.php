@@ -27,16 +27,30 @@ foreach ($all as $a) {
 if (isset($_GET["file"])) {
     $file = $_GET["file"];
 //    echo "Hoera! Dit werkt, ik ben goeeeeeed!";
-    $bytes = filesize($cwd . DIRECTORY_SEPARATOR . $file);
+
+    $location = $cwd . DIRECTORY_SEPARATOR . $file;
+    $bytes = filesize($location);
+    $modified = filemtime($location);
+    $mime = explode("/", mime_content_type($location))[0];
 
 
 
     echo "File: " . $file . "<br>";
     echo "Size: " . human_filesize($bytes) . "<br>";
 
-    if (is_writeable($cwd . DIRECTORY_SEPARATOR . $file)) {
+    if (is_writeable($location)) {
         echo "Writable: Yes<br>";
+    } else {
+        echo "Writable: No<br>";
     }
+
+    echo "Modified: " . date("j-m-Y @ H:i:s", $modified) . "<br>";
+
+//    echo "Mime:" . explode("/", $mime)[0] . "<br>";
+    if ($mime == "text") {
+        echo '<textarea>' . htmlentities(file_get_contents($location)) . '</textarea>';
+    }
+
 }   
 
 
