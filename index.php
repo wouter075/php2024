@@ -11,6 +11,11 @@ if (isset($_GET["cwd"])) {
     $cwd = $_GET["cwd"];
 }
 
+$cwd = realpath($cwd);
+if (!str_contains($cwd, getcwd())) {
+    $cwd = getcwd();
+}
+
 $all = scandir($cwd);
 $all = array_slice($all, 2);
 
@@ -46,11 +51,15 @@ if (isset($_GET["file"])) {
 
     echo "Modified: " . date("j-m-Y @ H:i:s", $modified) . "<br>";
 
-//    echo "Mime:" . explode("/", $mime)[0] . "<br>";
+    echo "Mime:" . $mime . "<br>";
     if ($mime == "text") {
         echo '<textarea>' . htmlentities(file_get_contents($location)) . '</textarea>';
     }
 
+    if ($mime == "image") {
+        $img_loc = str_replace(getcwd() . DIRECTORY_SEPARATOR, "", $location);
+        echo '<img src="' . $img_loc . '">';
+    }
 }   
 
 
