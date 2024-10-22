@@ -19,6 +19,29 @@ if (!str_contains($cwd, getcwd())) {
 $all = scandir($cwd);
 $all = array_slice($all, 2);
 
+// breadcrum
+echo '<a href="index.php">home</a>&nbsp;';
+
+$bread_path = str_replace(getcwd(), '', $cwd);
+//$bread_path = ltrim($bread_path, DIRECTORY_SEPARATOR);
+
+//echo $bread_path;
+
+$parts = explode(DIRECTORY_SEPARATOR, $bread_path);
+//print_r($parts);
+if (count($parts) > 1) {
+    //echo "Mappie!";
+    $base_link = getcwd();
+
+    $parts = array_slice($parts, 1);
+    foreach ($parts as $part) {
+        $base_link .= DIRECTORY_SEPARATOR . $part;
+        echo '&gt; <a href="index.php?cwd=' . $base_link . '">' . $part . '</a>';
+    }
+}
+
+echo "<br>";
+
 foreach ($all as $a) {
     $new_cwd = $cwd . DIRECTORY_SEPARATOR . $a;
     if (is_dir($new_cwd)) {
